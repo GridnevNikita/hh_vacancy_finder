@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, List, Any, cast
+from typing import Any, Dict, List, cast
 
 import requests
 
@@ -11,7 +11,7 @@ class AbstractAPI(ABC):
     """
 
     @abstractmethod
-    def connect(self) -> None:
+    def _connect(self) -> None:
         """Метод подключения к API"""
         pass
 
@@ -30,14 +30,18 @@ class HeadHunterAPI(AbstractAPI):
     def __init__(self, base_url: str = "https://api.hh.ru/vacancies"):
         self.__base_url = base_url
 
-    def connect(self) -> None:
+    def _connect(self) -> None:
         """Метод подключения к API"""
         response = requests.get(self.__base_url)
         response.raise_for_status()
 
-    def get_vacancies(self, keyword: str) -> List[Dict[str, Any]]:
+    def get_vacancies(self, keyword: str, per_page: int = 20) -> List[Dict[str, Any]]:
         """Получение вакансий по ключевому слову"""
-        params = {"text": keyword}
+        self._connect()
+        params = {
+            "text": keyword,
+            "per_page": per_page,
+        }
         response = requests.get(self.__base_url, params=params)
         response.raise_for_status()
         data = response.json()

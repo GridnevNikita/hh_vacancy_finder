@@ -3,18 +3,6 @@ from src.api import HeadHunterAPI
 
 
 @patch("src.api.requests.get")
-def test_connect_success(mock_get):
-    mock_response = Mock()
-    mock_response.raise_for_status.return_value = None
-    mock_get.return_value = mock_response
-
-    api = HeadHunterAPI()
-    api.connect()
-
-    mock_get.assert_called_once_with("https://api.hh.ru/vacancies")
-
-
-@patch("src.api.requests.get")
 def test_get_vacancies_success(mock_get):
     mock_response = Mock()
     mock_response.raise_for_status.return_value = None
@@ -28,11 +16,10 @@ def test_get_vacancies_success(mock_get):
     api = HeadHunterAPI()
     vacancies = api.get_vacancies("python")
 
-    mock_get.assert_called_once_with(
-        "https://api.hh.ru/vacancies",
-        params={"text": "python"}
-    )
-
-    assert isinstance(vacancies, list)
     assert len(vacancies) == 1
     assert vacancies[0]["name"] == "Python Developer"
+
+    assert mock_get.call_count == 2
+
+    args, kwargs = mock_get.call_args_list[1]
+    assert kwargs["params"] == {"text": "python", "per_page": 20}
