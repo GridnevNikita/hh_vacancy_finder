@@ -1,4 +1,4 @@
-from src.models import Vacancy
+from src.vacancies import Vacancy
 
 
 def test_salary_validation():

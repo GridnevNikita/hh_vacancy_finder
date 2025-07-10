@@ -1,8 +1,8 @@
 from unittest.mock import patch, Mock
-from src.api import HeadHunterAPI
+from src.hh_api import HeadHunterAPI
 
 
-@patch("src.api.requests.get")
+@patch("src.hh_api.requests.get")
 def test_get_vacancies_success(mock_get):
     mock_response = Mock()
     mock_response.raise_for_status.return_value = None
