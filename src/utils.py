@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
 from src.vacancies import Vacancy
 
@@ -33,9 +33,8 @@ def filter_vacancies(vacancies: List[Vacancy], filter_word: str) -> List[Vacancy
     return filtered
 
 
-def get_vacancies_by_salary(vacancies: List[Vacancy],
-    min_salary: Optional[int] = None,
-    max_salary: Optional[int] = None
+def get_vacancies_by_salary(
+    vacancies: List[Vacancy], min_salary: Optional[int] = None, max_salary: Optional[int] = None
 ) -> List[Vacancy]:
     """Возвращает вакансии, зарплата которых находится в указанном диапазоне"""
     filtered = []

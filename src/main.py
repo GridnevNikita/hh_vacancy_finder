@@ -2,23 +2,17 @@ import os
 
 from src.hh_api import HeadHunterAPI
 from src.json_saver import JsonFileSave
-from src.utils import (
-    vacancies_from_json,
-    filter_vacancies,
-    get_vacancies_by_salary,
-    sort_vacancies,
-    get_top_vacancies,
-)
+from src.utils import filter_vacancies, get_top_vacancies, get_vacancies_by_salary, sort_vacancies, vacancies_from_json
 
 
-def user_interaction():
+def user_interaction() -> None:
     """
     Основная функция взаимодействия с пользователем.
     Позволяет искать, фильтровать, сортировать и сохранять вакансии.
     """
 
     keyword = input("Введите поисковый запрос (или 'выход' для завершения): ").strip()
-    if not keyword or keyword.lower() == 'выход':
+    if not keyword or keyword.lower() == "выход":
         print("Выход из программы.")
         return
 
@@ -49,7 +43,9 @@ def user_interaction():
     while True:
         filter_answer = input("Хотите фильтровать вакансии по ключевому слову в описании? (да/нет): ").strip().lower()
         if filter_answer == "да":
-            keyword_filter = input("Введите ключевое слово для фильтрации (или напишите 'выход' для пропуска): ").strip().lower()
+            keyword_filter = (
+                input("Введите ключевое слово для фильтрации (или напишите 'выход' для пропуска): ").strip().lower()
+            )
             if keyword_filter != "выход":
                 vacancies = filter_vacancies(vacancies, keyword_filter)
                 print(f"После фильтрации осталось {len(vacancies)} вакансий.")
@@ -64,10 +60,12 @@ def user_interaction():
 
     # Фильтрация по зарплате
     salary_answer = input("Хотите фильтровать вакансии по зарплате? (да/нет): ").strip().lower()
-    if salary_answer == 'да':
+    if salary_answer == "да":
         min_salary = None
         while True:
-            min_salary_input = input("Введите минимальную зарплату (или напишите 'выход' для пропуска): ").strip().lower()
+            min_salary_input = (
+                input("Введите минимальную зарплату (или напишите 'выход' для пропуска): ").strip().lower()
+            )
             if min_salary_input == "выход":
                 break
             try:
@@ -78,7 +76,9 @@ def user_interaction():
 
         max_salary = None
         while True:
-            max_salary_input = input("Введите максимальную зарплату (или напишите 'выход' для пропуска): ").strip().lower()
+            max_salary_input = (
+                input("Введите максимальную зарплату (или напишите 'выход' для пропуска): ").strip().lower()
+            )
             if max_salary_input == "выход":
                 break
             try:
@@ -141,7 +141,9 @@ def user_interaction():
 
     # Сохранение в файл
     while True:
-        save_answer = input("Желаете ли вы сохранить вакансии в файл для дальнейшего просмотра? (да/нет): ").strip().lower()
+        save_answer = (
+            input("Желаете ли вы сохранить вакансии в файл для дальнейшего просмотра? (да/нет): ").strip().lower()
+        )
         if save_answer in ("да", "нет"):
             break
         else:
