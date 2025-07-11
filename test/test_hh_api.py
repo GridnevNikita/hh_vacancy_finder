@@ -1,4 +1,5 @@
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
+
 from src.hh_api import HeadHunterAPI
 
 
@@ -7,9 +8,7 @@ def test_get_vacancies_success(mock_get):
     mock_response = Mock()
     mock_response.raise_for_status.return_value = None
     mock_response.json.return_value = {
-        "items": [
-            {"name": "Python Developer", "salary": {"from": 100000}, "alternate_url": "example.com"}
-        ]
+        "items": [{"name": "Python Developer", "salary": {"from": 100000}, "alternate_url": "example.com"}]
     }
     mock_get.return_value = mock_response
 

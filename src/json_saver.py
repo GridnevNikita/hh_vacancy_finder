@@ -4,11 +4,11 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, List, cast
 
 
-class AbstractFileHandler(ABC):
+class AbstractFileSave(ABC):
     """Абстрактный класс для работы с файлами хранения вакансий."""
 
     @abstractmethod
-    def load(self) -> List[Dict[str, Any]]:
+    def load_vacancy(self) -> List[Dict[str, Any]]:
         """Получение данных из файла."""
         pass
 
@@ -23,14 +23,14 @@ class AbstractFileHandler(ABC):
         pass
 
 
-class JSONFileHandler(AbstractFileHandler):
+class JsonFileSave(AbstractFileSave):
     """Класс для работы с JSON-файлом хранения вакансий."""
 
     def __init__(self, filename: str = "vacancies.json") -> None:
         """Инициализация с указанием имени файла."""
         self.__filename = filename
 
-    def load(self) -> List[Dict[str, Any]]:
+    def load_vacancy(self) -> List[Dict[str, Any]]:
         """Загрузка всех вакансий из файла."""
         if not os.path.exists(self.__filename):
             return []
@@ -40,14 +40,14 @@ class JSONFileHandler(AbstractFileHandler):
 
     def add_vacancy(self, vacancy: Dict[str, Any]) -> None:
         """Добавление вакансии в файл без дублирования."""
-        data = self.load()
+        data = self.load_vacancy()
         if vacancy not in data:
             data.append(vacancy)
             self.save(data)
 
     def delete_vacancy(self, vacancy: Dict[str, Any]) -> None:
         """Удаление вакансии из файла."""
-        data = self.load()
+        data = self.load_vacancy()
         if vacancy in data:
             data.remove(vacancy)
             self.save(data)

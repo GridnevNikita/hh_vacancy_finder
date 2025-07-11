@@ -1,6 +1,3 @@
-from typing import Any
-
-
 class Vacancy:
     """Класс для представления вакансии."""
 
@@ -20,12 +17,14 @@ class Vacancy:
             return 0
         return salary
 
-    def __lt__(self, other: "Vacancy") -> bool:
+    def __lt__(self, other: object) -> bool:
         """Сравнение зарплат: меньше ли текущая зарплата."""
+        if not isinstance(other, Vacancy):
+            return NotImplemented
         return self.salary < other.salary
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         """Проверяет равенство зарплат у вакансий."""
         if not isinstance(other, Vacancy):
-            return False
+            return NotImplemented
         return self.salary == other.salary

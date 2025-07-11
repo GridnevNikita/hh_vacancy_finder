@@ -38,7 +38,7 @@ class HeadHunterAPI(AbstractAPI):
     def get_vacancies(self, keyword: str, per_page: int = 20) -> List[Dict[str, Any]]:
         """Получение вакансий по ключевому слову"""
         self._connect()
-        params = {
+        params: dict[str, str | int] = {
             "text": keyword,
             "per_page": per_page,
         }
