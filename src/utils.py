@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import List, Optional, Dict, Any
 
 from src.vacancies import Vacancy
 
@@ -6,12 +6,20 @@ from src.vacancies import Vacancy
 def vacancies_from_json(data: List[Dict[str, Any]]) -> List[Vacancy]:
     """Преобразует список словарей в список объектов Vacancy"""
     vacancies = []
-    for i in data:
-        title = i["title"]
-        url = i["url"]
-        salary = i["salary"]
-        description = i["description"]
-        vacancy = Vacancy(title, url, salary, description)
+    for item in data:
+        title = item["name"]
+        url = item["alternate_url"]
+        salary_from = None
+        salary = item.get("salary")
+        if salary:
+            salary_from = salary["from"]
+
+        snippet = item.get("snippet", {})
+        requirement = snippet.get("requirement") or ""
+        responsibility = snippet.get("responsibility") or ""
+        description = (requirement + "\n" + responsibility).strip()
+
+        vacancy = Vacancy(title, url, salary_from, description)
         vacancies.append(vacancy)
     return vacancies
 
@@ -25,9 +33,20 @@ def filter_vacancies(vacancies: List[Vacancy], filter_word: str) -> List[Vacancy
     return filtered
 
 
-def get_vacancies_by_salary(vacancies: List[Vacancy], min_salary: int, max_salary: int) -> List[Vacancy]:
+def get_vacancies_by_salary(vacancies: List[Vacancy],
+    min_salary: Optional[int] = None,
+    max_salary: Optional[int] = None
+) -> List[Vacancy]:
     """Возвращает вакансии, зарплата которых находится в указанном диапазоне"""
-    return [vacancy for vacancy in vacancies if min_salary <= vacancy.salary <= max_salary]
+    filtered = []
+    for vacancy in vacancies:
+        salary = vacancy.salary or 0
+        if min_salary is not None and salary < min_salary:
+            continue
+        if max_salary is not None and salary > max_salary:
+            continue
+        filtered.append(vacancy)
+    return filtered
 
 
 def sort_vacancies(vacancies: List[Vacancy], reverse: bool = True) -> List[Vacancy]:

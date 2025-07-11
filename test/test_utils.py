@@ -7,9 +7,24 @@ from src.vacancies import Vacancy
 @pytest.fixture
 def sample_data():
     return [
-        {"title": "Python Dev", "url": "link1", "salary": 150000, "description": "Опыт работы с Django"},
-        {"title": "Backend Dev", "url": "link2", "salary": 120000, "description": "Flask, FastAPI"},
-        {"title": "Junior Dev", "url": "link3", "salary": 80000, "description": "Python, обучение"},
+        {
+            "name": "Python Dev",
+            "alternate_url": "link1",
+            "salary": {"from": 150000},
+            "snippet": {"requirement": "Опыт работы с Django", "responsibility": "Разработка веб-приложений"},
+        },
+        {
+            "name": "Backend Dev",
+            "alternate_url": "link2",
+            "salary": {"from": 120000},
+            "snippet": {"requirement": "Flask, FastAPI", "responsibility": "Поддержка API"},
+        },
+        {
+            "name": "Junior Dev",
+            "alternate_url": "link3",
+            "salary": {"from": 80000},
+            "snippet": {"requirement": "Python, обучение", "responsibility": "Выполнение задач наставника"},
+        },
     ]
 
 
@@ -18,6 +33,8 @@ def test_vacancies_from_json(sample_data):
     assert all(isinstance(vacancy, Vacancy) for vacancy in vacancies)
     assert vacancies[0].title == "Python Dev"
     assert vacancies[1].salary == 120000
+    assert "Django" in vacancies[0].description
+    assert "веб-приложений" in vacancies[0].description
 
 
 def test_filter_vacancies(sample_data):
@@ -33,6 +50,15 @@ def test_get_vacancies_by_salary(sample_data):
     assert len(ranged) == 2
     for vac in ranged:
         assert 100000 <= vac.salary <= 160000
+
+    ranged_min_only = get_vacancies_by_salary(vacancies, 120000, None)
+    assert all(vac.salary >= 120000 for vac in ranged_min_only)
+
+    ranged_max_only = get_vacancies_by_salary(vacancies, None, 90000)
+    assert all(vac.salary <= 90000 for vac in ranged_max_only)
+
+    ranged_none = get_vacancies_by_salary(vacancies, None, None)
+    assert len(ranged_none) == len(vacancies)
 
 
 def test_sort_vacancies(sample_data):

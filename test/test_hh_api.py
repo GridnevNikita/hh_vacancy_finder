@@ -21,4 +21,4 @@ def test_get_vacancies_success(mock_get):
     assert mock_get.call_count == 2
 
     args, kwargs = mock_get.call_args_list[1]
-    assert kwargs["params"] == {"text": "python", "per_page": 20}
+    assert kwargs["params"] == {"text": "python", "per_page": 20, "area": 113}

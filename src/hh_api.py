@@ -41,6 +41,7 @@ class HeadHunterAPI(AbstractAPI):
         params: dict[str, str | int] = {
             "text": keyword,
             "per_page": per_page,
+            "area": 113
         }
         response = requests.get(self.__base_url, params=params)
         response.raise_for_status()
